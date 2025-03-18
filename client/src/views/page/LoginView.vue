@@ -13,7 +13,7 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
 <template>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div
-      class="card card-border border-base-300 card-xl overflow-hidden m-auto"
+      class="card card-xl  card-border border-base-300 overflow-hidden m-auto sm:w-1/3 md:w-1/4 max-w-md"
     >
       <div class="border-base-300 border-b border-dashed">
         <div class="flex items-center gap-2 p-4">
@@ -57,6 +57,9 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
             <button type="button" class="btn btn-primary btn-block">
               <font-awesome-icon :icon="['fas', 'right-to-bracket']" /> Login
             </button>
+            <div class="relative w-full">
+              <button class="link text-sm absolute right-0">สมัครสมาชิก</button>
+            </div>
           </div>
         </form>
       </div>
