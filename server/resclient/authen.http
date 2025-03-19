@@ -1,0 +1,36 @@
+### Show Me
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjQxNDA2MCwiZXhwIjoxNzQyNDE3NjYwfQ.E-3HgfRLy_01---zVf_51Fmq--EqiRBgiHMb-pP04X0
+
+GET http://localhost:3000/auth/me HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Login Admin
+
+POST http://localhost:3000/auth/authenticate HTTP/1.1
+content-type: application/json
+
+{
+    "username": "admin",
+    "password": "admin001"
+}
+
+### Login Student
+
+POST http://localhost:3000/auth/authenticate HTTP/1.1
+content-type: application/json
+
+{
+    "username": "6309681001",
+    "password": "password123"
+}
+
+### Login Advisor
+
+POST http://localhost:3000/auth/authenticate HTTP/1.1
+content-type: application/json
+
+{
+    "username": "somchai_s",
+    "password": "password123"
+}

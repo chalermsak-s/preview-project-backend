@@ -13,7 +13,7 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
 <template>
   <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div
-      class="card card-xl  card-border border-base-300 overflow-hidden m-auto sm:w-1/3 md:w-1/4 max-w-md"
+      class="card card-xl card-border border-base-300 overflow-hidden m-auto sm:w-1/3 md:w-4/12 lg:w-1/4 max-w-lg"
     >
       <div class="border-base-300 border-b border-dashed">
         <div class="flex items-center gap-2 p-4">

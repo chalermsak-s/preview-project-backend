@@ -159,7 +159,3 @@ export interface UserRole {
   role_name: Role
   users: User[]
 }
-
-export interface StudentState {
-  student: Student | null
-}

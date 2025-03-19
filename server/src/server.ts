@@ -2,22 +2,19 @@ import express, { Request, Response } from 'express'
 import multer from 'multer'
 import dotenv from 'dotenv'
 import cors from 'cors'
-dotenv.config()
+import studentRoute from './routes/studentRoute';
+import authRoutes from './routes/authRoutes';
 
+dotenv.config()
 //import { uploadFile } from './services/uploadFileService';
 const app = express()
-// const allowedOrigins = ["http://localhost:5173","https://lab7security-7rsqfzum2-didys-projects.vercel.app","https://lab7security.vercel.app"];
 
-// const options: cors.CorsOptions = {
-//   origin: '*',
-// }
-// Then pass these options to cors:
-// app.use(cors(options));
 app.use(cors())
 
 app.use(express.json())
-// app.use('/events',eventRoute);
-// app.use('/api/v1/auth',authRoute);
+
+app.use('/students',studentRoute);
+app.use('/auth',authRoutes);
 const port = process.env.PORT || 3000
 
 app.get('/', (req: Request, res: Response) => {
@@ -26,8 +23,9 @@ app.get('/', (req: Request, res: Response) => {
   })
 })
 
-// const upload = multer({ storage: multer.memoryStorage() });
 
+
+// const upload = multer({ storage: multer.memoryStorage() });
 // app.post('/upload', upload.single('file'), async (req:any, res:any) => {
 //   try {
 //     const file = req.file;
@@ -48,6 +46,7 @@ app.get('/', (req: Request, res: Response) => {
 //     res.status(500).send('Error uploading file.');
 //   }
 // });
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
 })

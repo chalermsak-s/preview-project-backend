@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
 import { createPinia } from "pinia";
-// import './style.css'
+
 import './assets/main.css'
+import '@/services/AxiosInterceptorSetup'
 // นำเข้า Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import App from './App.vue'
