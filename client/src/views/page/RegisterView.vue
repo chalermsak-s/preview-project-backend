@@ -14,16 +14,12 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment)
 
 const $swal = inject<typeof Swal>('$swal')
 const showAlert = () => {
-  if ($swal) {
-    $swal.fire({
-      icon: 'success',
-      title: 'บันทึกข้อมูลสำเร็จ',
-      showConfirmButton: false,
-      timer: 1500
-    })
-  } else {
-    console.error('$swal is not available')
-  }
+  $swal?.fire({
+    icon: 'success',
+    title: 'บันทึกข้อมูลสำเร็จ',
+    showConfirmButton: false,
+    timer: 1500,
+  }) ?? console.error('$swal is not available')
 }
 </script>
 <template lang="">
@@ -91,7 +87,7 @@ const showAlert = () => {
           /></label>
         </div>
         <div class="card-actions items-center gap-6">
-          <button @click="()=>showAlert()" class="btn btn-primary btn-block">
+          <button @click="() => showAlert()" class="btn btn-primary btn-block">
             ลงทะเบียน
           </button>
         </div>

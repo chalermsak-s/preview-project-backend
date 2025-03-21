@@ -16,21 +16,21 @@ const people = [
     name: "นายวีรยุทธ เอื้อใจพระ",
     image:
       "https://images.deepai.org/machine-learning-models/a6d60048061345c0b77a5677408186ed/film-poster-generator-thumb.jpg",
-    link: "#",
+    link: "https://github.com/vyut",
   },
   {
     id: "672132168",
     name: "นางสาวธนาทร ไชยรินทร์",
     image:
       "https://images.deepai.org/machine-learning-models/80a11f4024424928adf6e72ac023ae5b/children-book-generator-thumb.jpg",
-    link: "#",
+    link: "https://github.com/Tanatorn168",
   },
   {
     id: "672132169",
     name: "นางสาวปาริฉัตร ยานแก้ว",
     image:
       "https://images.deepai.org/machine-learning-models/8f06a3f311b246a5afac4a0ed71480c6/anime-superhero-generator-thumb.jpg",
-    link: "#",
+    link: "https://github.com/MinChatr",
   },
 ];
 </script>

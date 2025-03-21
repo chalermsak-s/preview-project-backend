@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import apiClient from '@/services/AxiosClient';
 import type { Advisor } from '@/types'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUserCircle } from '@fortawesome/free-regular-svg-icons';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
+import AdvisorService from '@/services/AdvisorService'
 
 library.add(faUserCircle, faChevronLeft, faChevronRight);
 
@@ -13,7 +14,7 @@ const advisors = ref<Advisor[]>([])
 
 const fetchAdvisors = async () => {
   try {
-    const response = await apiClient.get('/advisors');
+    const response = await AdvisorService.getAdvisors()
     advisors.value = response.data;
   } catch (error) {
     console.error('Error fetching advisors:', error);
