@@ -2,8 +2,9 @@ import express, { Request, Response } from 'express'
 import multer from 'multer'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import studentRoute from './routes/studentRoute';
-import authRoutes from './routes/authRoutes';
+import studentRoute from './routes/studentRoute'
+import authRoutes from './routes/authRoutes'
+import advisorRoutes from './routes/advisorRoutes'
 
 dotenv.config()
 //import { uploadFile } from './services/uploadFileService';
@@ -13,8 +14,9 @@ app.use(cors())
 
 app.use(express.json())
 
-app.use('/students',studentRoute);
-app.use('/auth',authRoutes);
+app.use('/students', studentRoute)
+app.use('/auth', authRoutes)
+app.use('/advisors', advisorRoutes)
 const port = process.env.PORT || 3000
 
 app.get('/', (req: Request, res: Response) => {
@@ -22,8 +24,6 @@ app.get('/', (req: Request, res: Response) => {
     message: 'Hello World',
   })
 })
-
-
 
 // const upload = multer({ storage: multer.memoryStorage() });
 // app.post('/upload', upload.single('file'), async (req:any, res:any) => {

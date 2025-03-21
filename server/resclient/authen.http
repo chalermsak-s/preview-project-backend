@@ -1,13 +1,26 @@
 ### Show Me
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjQxNDA2MCwiZXhwIjoxNzQyNDE3NjYwfQ.E-3HgfRLy_01---zVf_51Fmq--EqiRBgiHMb-pP04X0
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc0MjQ1NjMyOCwiZXhwIjoxNzQyNDU5OTI4fQ.mjh2zqsCBmWVx0pmPGsNVDpGuNAJ0azAnSpQOV9WCaI
 
-GET http://localhost:3000/auth/me HTTP/1.1
+@url1 = http://localhost:3000
+
+@url2 = http://localhost:3000
+
+@host = {{url1}}
+
+
+GET {{host}}/auth/me HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Check checkRole
+
+POST {{host}}/auth/checkRole HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Login Admin
 
-POST http://localhost:3000/auth/authenticate HTTP/1.1
+POST {{host}}/auth/authenticate HTTP/1.1
 content-type: application/json
 
 {
@@ -17,7 +30,7 @@ content-type: application/json
 
 ### Login Student
 
-POST http://localhost:3000/auth/authenticate HTTP/1.1
+POST {{host}}/auth/authenticate HTTP/1.1
 content-type: application/json
 
 {
@@ -27,10 +40,27 @@ content-type: application/json
 
 ### Login Advisor
 
-POST http://localhost:3000/auth/authenticate HTTP/1.1
+POST {{host}}/auth/authenticate HTTP/1.1
 content-type: application/json
 
 {
     "username": "somchai_s",
     "password": "password123"
 }
+
+### Render
+
+POST https://lab5-s846.onrender.com/api/v1/auth/authenticate HTTP/1.1
+content-type: application/json
+
+{
+    "username":"user1@abc.com",
+    "password":"password1"
+}
+
+@token_reder = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTc0MjQ2MDc3MywiZXhwIjoxNzQyNDc4NzczfQ.zUE4Y4BEftR5TEG4iQuBbOoIpUD8I0hem18pUVlP8oc
+
+### Render 
+GET https://lab5-s846.onrender.com/api/v1/auth/me HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{@token_reder}}

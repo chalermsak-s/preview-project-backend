@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { inject } from 'vue'
+import Swal from 'sweetalert2'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCirclePlay,
@@ -9,6 +11,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 //เพิ่มเฉพาะไอคอนที่ใช้ในหน้านี้
 library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment)
+
+const $swal = inject<typeof Swal>('$swal')
+const showAlert = () => {
+  if ($swal) {
+    $swal.fire({
+      icon: 'success',
+      title: 'บันทึกข้อมูลสำเร็จ',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  } else {
+    console.error('$swal is not available')
+  }
+}
 </script>
 <template lang="">
   <div class="sm:w-1/3 md:w-4/12 lg:w-8/12 max-w-xl m-auto py-20">
@@ -75,7 +91,9 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment)
           /></label>
         </div>
         <div class="card-actions items-center gap-6">
-          <button class="btn btn-primary btn-block">ลงทะเบียน</button>
+          <button @click="()=>showAlert()" class="btn btn-primary btn-block">
+            ลงทะเบียน
+          </button>
         </div>
       </div>
     </div>

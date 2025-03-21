@@ -31,10 +31,13 @@ export const protect = async (
   }
 }
 
-export function checkAdmin(req: Request, res: Response, next: NextFunction) {
+export function checkRole(req: Request, res: Response, next: NextFunction) {
   if (
     req.body.user &&
-    req.body.user.roles.map((role: user_role) => role.role_name).includes('Admin')
+    req.body.user.user_role &&
+    req.body.user.user_role.role_name === 'Admin' ||
+    req.body.user.user_role.role_name === 'Advisor' ||
+    req.body.user.user_role.role_name === 'Student'
   ) {
     next()
   } else {
@@ -45,29 +48,3 @@ export function checkAdmin(req: Request, res: Response, next: NextFunction) {
   next()
 }
 
-export function checkAdvisor(req: Request, res: Response, next: NextFunction) {
-  if (
-    req.body.user &&
-    req.body.user.roles.map((role: user_role) => role.role_name).includes('Advisor')
-  ) {
-    next()
-  } else {
-    return res
-      .status(403)
-      .json({ message: 'You are not authorized to perform this action' })
-  }
-  next()
-}
-export function checkStudent(req: Request, res: Response, next: NextFunction) {
-  if (
-    req.body.user &&
-    req.body.user.roles.map((role: user_role) => role.role_name).includes('Student')
-  ) {
-    next()
-  } else {
-    return res
-      .status(403)
-      .json({ message: 'You are not authorized to perform this action' })
-  }
-  next()
-}

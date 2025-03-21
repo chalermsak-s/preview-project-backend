@@ -1,9 +1,8 @@
 import * as authService from '../services/authService'
 import * as authMiddleware from '../middleware/authMiddleware'
-import express from 'express'
+import express, { Request, Response } from 'express'
 import type { user_role } from '@prisma/client'
 import type { RegisterRequest } from '../models/registerRequest'
-import { role } from '@prisma/client'
 
 const router = express.Router()
 
@@ -55,13 +54,13 @@ router.post('/authenticate', async (req, res) => {
 })
 
 router.post(
-  '/admin',
+  '/checkRole',
   authMiddleware.protect,
-  authMiddleware.checkAdmin,
-  async (req, res) => {
+  authMiddleware.checkRole,
+  async (req: Request, res: Response) => {
     res.status(200).json({
       status: 'success',
-      message: 'You are an admin',
+      message: 'You are an authen',
     })
   }
 )

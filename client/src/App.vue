@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCirclePlay,
@@ -13,6 +13,24 @@ import {
   faCode,
 } from '@fortawesome/free-solid-svg-icons'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
+
+import { ref, onMounted, onUnmounted } from 'vue';
+
+const details = ref<HTMLElement | null>(null);
+
+const closeDetails = (event:any) => {
+  if (details.value && !details.value.contains(event.target)) {
+    details.value.removeAttribute('open');
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', closeDetails);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeDetails);
+});
 
 // เพิ่มเฉพาะไอคอนที่ใช้ในหน้านี้
 library.add(
@@ -34,7 +52,12 @@ library.add(
     <div class="navbar bg-base-100 shadow-sm">
       <div class="navbar-start">
         <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+          <!-- ปุ่มเปิดเมนู -->
+          <div
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost lg:hidden"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-5 w-5"
@@ -50,9 +73,11 @@ library.add(
               />
             </svg>
           </div>
+
+          <!-- เมนู Dropdown -->
           <ul
             tabindex="0"
-            class="menu menu-lg dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            class="menu menu-lg dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow"
           >
             <li>
               <RouterLink :to="{ name: 'login-view' }">
@@ -60,19 +85,24 @@ library.add(
               </RouterLink>
             </li>
             <li>
-              <a> <font-awesome-icon :icon="['fas', 'file']" /> รายชื่อ </a>
+              <a>
+                <font-awesome-icon :icon="['fas', 'file']" /> รายชื่อ
+              </a>
               <ul class="p-2">
                 <li>
-                  <a>
-                    <font-awesome-icon :icon="['fas', 'user-tie']" />
-                    อาจารย์
-                  </a>
+                  <RouterLink
+                    :to="{ name: 'advisor-list-view' }"
+                  >
+                    <font-awesome-icon :icon="['fas', 'user-tie']" /> อาจารย์
+                  </RouterLink>
                 </li>
                 <li>
-                  <a>
+                  <RouterLink
+                    :to="{ name: 'student-list-view' }"
+                  >
                     <font-awesome-icon :icon="['fas', 'users-between-lines']" />
                     นักศึกษา
-                  </a>
+                  </RouterLink>
                 </li>
               </ul>
             </li>
@@ -84,6 +114,7 @@ library.add(
             </li>
           </ul>
         </div>
+
         <RouterLink :to="{ name: 'login-view' }" class="btn btn-ghost text-xl">
           <font-awesome-icon :icon="['fas', 'comments']" />
           ApptCAMT
@@ -97,14 +128,14 @@ library.add(
             </RouterLink>
           </li>
           <li>
-            <details>
+            <details ref="details">
               <summary>
                 <font-awesome-icon :icon="['fas', 'file']" /> รายชื่อ
               </summary>
               <ul class="p-2">
                 <li>
-                  <RouterLink :to="{ name: 'student-list-view' }">
-                    <font-awesome-icon :icon="['fas', 'user-tie']" /> อาจารย์
+                  <RouterLink :to="{ name: 'advisor-list-view' }">
+                    <font-awesome-icon :icon="['fas', 'user-tie']" />อาจารย์
                   </RouterLink>
                 </li>
                 <li>

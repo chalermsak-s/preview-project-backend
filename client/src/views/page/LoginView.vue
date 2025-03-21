@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCirclePlay,
@@ -58,7 +59,7 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
               <font-awesome-icon :icon="['fas', 'right-to-bracket']" /> Login
             </button>
             <div class="relative w-full">
-              <button class="link text-sm absolute right-0">สมัครสมาชิก</button>
+              <RouterLink :to="{ name: 'register-view' }" class="link text-sm absolute right-0">ลงทะเบียน</RouterLink>
             </div>
           </div>
         </form>

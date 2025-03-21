@@ -9,6 +9,8 @@ import StudentDetailView from '@/views/student/StudentDetailView.vue'
 import { useStudentStore } from '@/stores/student'
 import studentService from '@/services/StudentService'
 
+import AdvisorListView from "@/views/advisor/AdvisorListView.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,22 +56,31 @@ const router = createRouter({
         if (isNaN(id)) {
           return { name: '404-resource-view', params: { resource: 'student' } }
         }
-    
+
         const studentStore = useStudentStore()
-    
+
         try {
           const response = await studentService.getStudent(id)
           studentStore.setStore(response.data)
           return true // อนุญาตให้ไปต่อ
-        } catch (error:any) {
+        } catch (error: any) {
           if (error.response?.status === 404) {
-            return { name: '404-resource-view', params: { resource: 'student' } }
+            return {
+              name: '404-resource-view',
+              params: { resource: 'student' },
+            }
           } else {
             return { name: 'network-error-view' }
           }
         }
       },
-    }
+    },
+    {
+      path: '/advisor',
+      name: 'advisor-list-view',
+      component: AdvisorListView,
+      props: true
+    },
   ],
   scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {

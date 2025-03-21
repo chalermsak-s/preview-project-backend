@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import type { Student, PageStudent } from '../models/student'
-import { connect } from 'http2'
 
 const prisma = new PrismaClient()
 
