@@ -8,9 +8,17 @@ import {
   faEnvelope,
   faKey,
   faComment,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons'
 //เพิ่มเฉพาะไอคอนที่ใช้ในหน้านี้
-library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment)
+library.add(
+  faCirclePlay,
+  faRightToBracket,
+  faEnvelope,
+  faKey,
+  faComment,
+  faUser
+)
 
 const $swal = inject<typeof Swal>('$swal')
 const showAlert = () => {
@@ -55,16 +63,7 @@ const showAlert = () => {
         <div class="flex flex-col gap-1">
           <label
             class="input input-border flex max-w-none items-center gap-2 w-full"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              fill="currentColor"
-              class="h-4 w-4 opacity-70"
-            >
-              <path
-                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
-              ></path>
-            </svg>
+            ><font-awesome-icon :icon="['fas', 'user']" class="h-4 w-4 opacity-70" />
             <input type="text" class="grow" placeholder="Username"
           /></label>
         </div>
