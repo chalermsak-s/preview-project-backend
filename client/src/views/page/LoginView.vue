@@ -28,8 +28,8 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
       </div>
       <div class="card-body gap-4">
         <form action="">
-          <div class="flex flex-col gap-1 mb-3">
-            <label class="input input-border flex max-w-none items-center gap-2"
+          <div class="flex flex-col gap-1 mb-3 w-full">
+            <label class="input input-border flex max-w-none items-center gap-2 w-full"
               ><font-awesome-icon :icon="['fas', 'envelope']" />
               <input
                 type="text"
@@ -38,8 +38,8 @@ library.add(faCirclePlay, faRightToBracket, faEnvelope, faKey, faComment);
                 autocomplete="off"
             /></label>
           </div>
-          <div class="flex flex-col gap-1 mb-3">
-            <label class="input input-border flex max-w-none items-center gap-2"
+          <div class="flex flex-col gap-1 mb-3 w-full">
+            <label class="input input-border flex max-w-none items-center gap-2 w-full"
               ><font-awesome-icon :icon="['fas', 'key']" />
               <input
                 type="password"
