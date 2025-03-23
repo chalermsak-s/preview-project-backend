@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import type { Student, PageStudent } from '../models/student'
+import type { Student, PageStudent, InStudent } from '../models/student'
 
 const prisma = new PrismaClient()
 
@@ -52,19 +52,30 @@ export function getStudentById(id: number) {
   })
 }
 
-export function addStudent(newStudent: Student) {
-  return prisma.student.create({
+export function addStudent(newStudent: InStudent) {
+  return prisma.user.create({
     data: {
-      student_id_card: newStudent.student_id_card || '',
-      first_name: newStudent.first_name || '',
-      last_name: newStudent.last_name || '',
-      picture: newStudent.picture || null,
-      department_id: newStudent.department_id || null,
-      degree_id: newStudent.degree_id || null,
-      advisor_id: newStudent.advisor_id || null,
+      username: newStudent.username,
+      password: newStudent.password,
+      user_role: {
+        connect: {
+          role_name: 'Student', // Replace "Student" with the actual role name or use an ID
+        },
+      },
+      student: {
+        create: {
+          student_id_card: newStudent.student_id_card,
+          first_name: newStudent.first_name,
+          last_name: newStudent.last_name,
+          picture: newStudent.picture,
+          department_id: newStudent.department_id,
+          degree_id: newStudent.degree_id,
+          advisor_id: newStudent.advisor_id
+        },
+      },
     },
-    omit: {
-      degree_id: true,
+    include: {
+      student: true,
     },
   })
 }
@@ -97,7 +108,7 @@ export async function getAllStudentPagination(
         select: {
           username: true,
         },
-      }
+      },
     },
   })
   const count = await prisma.student.count({ where })

@@ -66,3 +66,6 @@ jest.cache/
 
 prisma/migrations/
 prisma/migrations/migration_lock.toml
+
+# Ignore uploads folder (where uploaded files are stored)
+uploads/

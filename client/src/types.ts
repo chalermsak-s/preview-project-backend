@@ -163,3 +163,19 @@ export interface UserRole {
 export interface StudentState {
   student: Student | null
 }
+
+export interface RegisterForm {
+  username: string
+  password: string
+  student_id_card: string
+  first_name: string
+  last_name: string
+  picture: File | null
+  department_id: string
+  degree_id: string
+  advisor_id: string
+}
+
+export interface MessageState {
+  message: string;
+}

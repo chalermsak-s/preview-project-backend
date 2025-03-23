@@ -26,3 +26,15 @@ export interface PageStudent {
   count: number
   students: Student[]
 }
+
+export interface InStudent {
+  username: string
+  password: string
+  student_id_card: string
+  first_name: string
+  last_name: string
+  picture: string
+  department_id: number
+  degree_id: number
+  advisor_id: number
+}

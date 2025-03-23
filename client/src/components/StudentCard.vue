@@ -8,12 +8,17 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons'
 library.add(faUserCircle, faChevronLeft, faChevronRight)
+
 </script>
 
 <template>
   <RouterLink
     class="student-link"
-    :to="{ name: 'student-detail-view', params: { id: student.id } }"
+    :to="
+      student.id
+        ? { name: 'student-detail-view', params: { id: student.id } }
+        : '#'
+    "
   >
     <li class="list-row">
       <div>

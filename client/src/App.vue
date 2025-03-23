@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { RouterLink, RouterView} from 'vue-router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCirclePlay,

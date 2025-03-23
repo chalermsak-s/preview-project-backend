@@ -1,7 +1,8 @@
-
 import s3Client from '../awsConfig';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomBytes } from 'crypto';
+import dotenv from 'dotenv'
+dotenv.config();
 
 function generateSaltedFilename(originalName: string): string {
     const salt = randomBytes(16).toString('hex');

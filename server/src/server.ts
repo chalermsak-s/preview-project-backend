@@ -7,49 +7,64 @@ import authRoutes from './routes/authRoutes'
 import advisorRoutes from './routes/advisorRoutes'
 import { uploadFile } from './services/uploadFileService'
 
+const port = process.env.PORT || 3000
 dotenv.config()
 const app = express()
 
-app.use(cors())
+import fs from 'fs';
+import path from 'path';
 
+app.use(cors())
 app.use(express.json())
+
 
 app.use('/students', studentRoute)
 app.use('/auth', authRoutes)
 app.use('/advisors', advisorRoutes)
-const port = process.env.PORT || 3000
 
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    message:"Welcome to Backend"
+    message: 'Welcome to Backend',
   })
 })
 
-const upload = multer({ storage: multer.memoryStorage() })
-app.post(
-  '/upload',
-  upload.single('file'),
-  async (req: Request, res: Response) => {
-    try {
-      const file = req.file
-      if (!file) {
-        return res.status(400).send('No file uploaded.')
-      }
+const uploadDir = path.join(__dirname, 'uploads');
+// ตรวจสอบและสร้างโฟลเดอร์อัปโหลดถ้ายังไม่มี
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-      const bucket = process.env.SUPABASE_BUCKET_NAME
-      const filePath = process.env.UPLOAD_DIR
+// ตั้งค่าการจัดเก็บไฟล์
+const storage = multer.diskStorage({
+  destination: (req: Request, file: Express.Multer.File, callback) => {
+    callback(null, uploadDir);
+  },
+  filename: (req: Request, file: Express.Multer.File, callback) => {
+    const uniqueSuffix = `${Date.now()}${path.extname(file.originalname)}`;
+    callback(null, uniqueSuffix);
+  },
+});
 
-      if (!bucket || !filePath) {
-        return res.status(500).send('Bucket name or file path not configured.')
-      }
-      const ouputUrl = await uploadFile(bucket, filePath, file)
+const upload = multer({ storage });
 
-      res.status(200).send(ouputUrl)
-    } catch (error) {
-      res.status(500).send('Error uploading file.')
-    }
+app.post('/upload', upload.single('file'), (req: Request, res: Response) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
   }
-)
+
+  const filePath = path.join(__dirname, 'uploads', req.file.filename);
+  const fileUrl = `/uploads/${req.file.filename}`;
+
+  // ส่งข้อมูลไฟล์กลับ รวมถึง path ของไฟล์
+  res.json({ 
+    filename: req.file.filename, 
+    path: filePath, // Path แบบเต็มของไฟล์
+    url: fileUrl    // URL สำหรับการเข้าถึงไฟล์
+  });
+});
+
+// เสิร์ฟไฟล์ในโฟลเดอร์ 'uploads'
+app.use('/uploads', express.static(uploadDir));
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)

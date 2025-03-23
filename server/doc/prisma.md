@@ -22,3 +22,5 @@
 
 ## Migrate the Database
 npx prisma migrate dev --name fix_schema_relations
+
+## รหัสผ่าน Prisma ห้ามขึ้นด้วยตัวเลขต้องเป็นตัวอักษรก่อน

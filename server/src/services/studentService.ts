@@ -1,4 +1,4 @@
-import type { Student } from '../models/student'
+import type { InStudent } from '../models/student'
 import * as repo from '../repository/studentRepository'
 
 export function getAllStudents() {
@@ -9,7 +9,7 @@ export function getStudentById(id: number) {
   return repo.getStudentById(id)
 }
 
-export function addStudent(newStudent: Student) {
+export function addStudent(newStudent: InStudent) {
   return repo.addStudent(newStudent)
 }
 
