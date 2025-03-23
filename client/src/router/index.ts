@@ -6,6 +6,7 @@ import RegisterView from '@/views/page/RegisterView.vue'
 import StudentListView from '@/views/student/StudentListView.vue'
 import StudentDetailView from '@/views/student/StudentDetailView.vue'
 
+
 import { useStudentStore } from '@/stores/student'
 import studentService from '@/services/StudentService'
 

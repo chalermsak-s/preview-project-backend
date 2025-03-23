@@ -47,7 +47,7 @@ model advisor {
   id                   Int                @id @default(autoincrement())
   first_name           String             @db.VarChar(45)
   last_name            String             @db.VarChar(45)
-  picture              String?            @db.VarChar(45)
+  picture              String?            @db.VarChar(255)
   academic_position_id Int?
   department_id        Int?
   admin_id             Int?
@@ -79,7 +79,7 @@ model student {
   student_id_card String        @unique @db.VarChar(15)
   first_name      String        @db.VarChar(45)
   last_name       String        @db.VarChar(45)
-  picture         String?       @db.VarChar(45)
+  picture         String?       @db.VarChar(255)
   department_id   Int?
   degree_id       Int?
   advisor_id      Int?
@@ -116,7 +116,7 @@ model announcement {
   id          Int      @id @default(autoincrement())
   topic       String   @db.VarChar(70)
   description String?  @db.VarChar(225)
-  file        String?  @db.VarChar(45)
+  file        String?  @db.VarChar(255)
   posted_date DateTime @default(now())
   advisor_id  Int?
   advisor     advisor? @relation(fields: [advisor_id], references: [id])

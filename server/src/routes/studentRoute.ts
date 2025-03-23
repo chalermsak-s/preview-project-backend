@@ -92,9 +92,9 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
       first_name: newStudent.first_name,
       last_name: newStudent.last_name,
       picture: ouputUrl, // URL ที่ได้จากการอัปโหลดไฟล์
-      department_id: newStudent.department_id,
-      degree_id: newStudent.degree_id,
-      advisor_id: newStudent.advisor_id
+      department_id: Number(newStudent.department_id),
+      degree_id: Number(newStudent.degree_id),
+      advisor_id: Number(newStudent.advisor_id)
     };
 
     // เรียก service เพื่อเพิ่มข้อมูลนักศึกษา
