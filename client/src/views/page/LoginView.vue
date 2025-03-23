@@ -33,9 +33,9 @@ library.add(
   faUser
 )
 
-const authStore = useAuthStore()
-const messageStore = useMessageStore()
-const router = useRouter()
+// const authStore = useAuthStore()
+// const messageStore = useMessageStore()
+// const router = useRouter()
 
 // Initialize form with validation schema
 const { handleSubmit, errors } = useForm({
@@ -91,7 +91,7 @@ const onSubmit = handleSubmit(async (values) => {
               <font-awesome-icon :icon="['fas', 'user']" />
               <input
                 v-model="username"
-                type="text"
+                type="number"
                 class="grow text-base"
                 placeholder="Username"
                 autocomplete="off"

@@ -170,7 +170,7 @@ export interface RegisterForm {
   student_id_card: string
   first_name: string
   last_name: string
-  picture: File | null
+  file: File | null
   department_id: string
   degree_id: string
   advisor_id: string

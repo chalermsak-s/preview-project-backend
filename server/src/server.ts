@@ -4,7 +4,8 @@ import cors from 'cors'
 import studentRoute from './routes/studentRoute'
 import authRoutes from './routes/authRoutes'
 import advisorRoutes from './routes/advisorRoutes'
-import { uploadFile } from './services/uploadFileService'
+import departmentRoutes from './routes/departmentRoutes'
+import degreeRoutes from './routes/degreeRoutes'
 
 const port = process.env.PORT || 3000
 dotenv.config()
@@ -16,10 +17,14 @@ app.use(express.json())
 app.use('/students', studentRoute)
 app.use('/auth', authRoutes)
 app.use('/advisors', advisorRoutes)
+app.use('/departments', departmentRoutes)
+app.use('/degrees', degreeRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    message: 'Welcome to Backend',
+    status: 'success',
+    message: 'Welcome to the Backend API!',
+    timestamp: new Date().toISOString(),
   })
 })
 

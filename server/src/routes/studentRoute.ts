@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import multer from 'multer'
 import dotenv from 'dotenv'
 import { uploadFile } from '../services/uploadFileService'
-import * as service from '../services/studentService'
+import * as studentService from '../services/studentService'
 import type { InStudent } from '../models/student'
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -15,7 +15,7 @@ router.get('/', async (req: Request, res: Response) => {
     const pageNo = parseInt(req.query.pageNo as string) || 1
     const keyword = (req.query.keyword as string) || ''
     try {
-      const result = await service.getAllStudentPagination(
+      const result = await studentService.getAllStudentPagination(
         keyword,
         pageSize,
         pageNo
@@ -41,15 +41,15 @@ router.get('/', async (req: Request, res: Response) => {
     }
   } else if (req.query.category) {
     const category = req.query.category
-    res.json(await service.getAllStudents())
+    res.json(await studentService.getAllStudents())
   } else {
-    res.json(await service.getAllStudents())
+    res.json(await studentService.getAllStudents())
   }
 })
 
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id)
-  const event = await service.getStudentById(id)
+  const event = await studentService.getStudentById(id)
   if (event) {
     res.json(event)
   } else {
@@ -98,7 +98,7 @@ router.post('/', upload.single('file'), async (req: Request, res: Response) => {
     };
 
     // เรียก service เพื่อเพิ่มข้อมูลนักศึกษา
-    const result = await service.addStudent(dataStudent);
+    const result = await studentService.addStudent(dataStudent);
 
     // ส่งข้อมูลที่เพิ่มสำเร็จกลับไป
     res.status(201).json(result);

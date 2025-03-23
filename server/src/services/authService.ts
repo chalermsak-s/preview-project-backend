@@ -1,10 +1,10 @@
 import type { RegisterRequest } from '../models/registerRequest'
-import * as authRepo from '../repository/authRepository'
+import * as authRepository from '../repository/authRepository'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 export function findByUsername(username: string) {
-  return authRepo.findByUsername(username)
+  return authRepository.findByUsername(username)
 }
 
 export async function getUserFromToken(token: string) {
@@ -12,7 +12,7 @@ export async function getUserFromToken(token: string) {
     throw new Error('JWT_SECRET is not defined')
   }
   const decoded = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload
-  return await authRepo.findByUserId(decoded.userId)
+  return await authRepository.findByUserId(decoded.userId)
 }
 export function comparePassword(password: string, hash: string) {
   return bcrypt.compare(password, hash)
@@ -27,7 +27,7 @@ export function generatetoken(userId: number) {
 
 export function registerAdmin(registerRequest: RegisterRequest) {
   const { user_role_id, username, password } = registerRequest
-  return authRepo.registerAdmin(
+  return authRepository.registerAdmin(
     user_role_id,
     username,
     bcrypt.hashSync(password)
@@ -35,5 +35,5 @@ export function registerAdmin(registerRequest: RegisterRequest) {
 }
 
 export function updatePassword(userId: number, password: string) {
-  return authRepo.updatePassword(userId, bcrypt.hashSync(password))
+  return authRepository.updatePassword(userId, bcrypt.hashSync(password))
 }

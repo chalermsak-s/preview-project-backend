@@ -1,7 +1,9 @@
-import * as repo from '../repository/advisorRepository'
+import * as advisorRepository from '../repository/advisorRepository'
 
 export function getAllAdvisors() {
-  return repo.getAllAdvisors()
+  return advisorRepository.getAllAdvisors()
 }
 
-
+export function getAdvisorById(id: number) {
+  return advisorRepository.getAdvisorById(id)
+}

@@ -1,14 +1,14 @@
 import type { InStudent } from '../models/student'
-import * as repo from '../repository/studentRepository'
+import * as studentRepository from '../repository/studentRepository'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 export function getAllStudents() {
-  return repo.getAllStudents()
+  return studentRepository.getAllStudents()
 }
 
 export function getStudentById(id: number) {
-  return repo.getStudentById(id)
+  return studentRepository.getStudentById(id)
 }
 
 export function addStudent(newStudent: InStudent) {
@@ -23,7 +23,7 @@ export function addStudent(newStudent: InStudent) {
     degree_id: newStudent.degree_id,
     advisor_id: newStudent.advisor_id
   };
-  return repo.addStudent(dataStudent)
+  return studentRepository.addStudent(dataStudent)
 }
 
 export async function getAllStudentPagination(
@@ -31,7 +31,7 @@ export async function getAllStudentPagination(
   pageSize: number,
   pageNo: number
 ) {
-  const pageStudents = await repo.getAllStudentPagination(
+  const pageStudents = await studentRepository.getAllStudentPagination(
     keyword,
     pageSize,
     pageNo
@@ -41,5 +41,5 @@ export async function getAllStudentPagination(
 
 
 export function count() {
-  return repo.countStudent()
+  return studentRepository.countStudent()
 }

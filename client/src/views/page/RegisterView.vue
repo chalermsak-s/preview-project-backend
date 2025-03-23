@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Swal from 'sweetalert2';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import axios from 'axios';
-import type { RegisterForm } from '@/types'; // Ensure this type is correctly defined in your types file
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import apiClient from '@/services/AxiosClient'
+import AdvisorService from '@/services/AdvisorService'
+import RegisterService from '@/services/RegisterService'
+import type { RegisterForm, Advisor, Degree, Department } from '@/types' // Ensure this type is correctly defined in your types file
 import {
   faCirclePlay,
   faRightToBracket,
@@ -17,7 +20,7 @@ import {
   faBuilding,
   faGraduationCap,
   faChalkboardTeacher,
-} from '@fortawesome/free-solid-svg-icons';
+} from '@fortawesome/free-solid-svg-icons'
 
 // Add only the icons used in this page
 library.add(
@@ -33,10 +36,12 @@ library.add(
   faBuilding,
   faGraduationCap,
   faChalkboardTeacher
-);
+)
 
 // Inject SweetAlert2
-const $swal = Swal;
+const $swal = Swal
+// Initialize router
+const router = useRouter()
 
 // Reactive form state
 const form = ref<RegisterForm>({
@@ -45,37 +50,33 @@ const form = ref<RegisterForm>({
   student_id_card: '',
   first_name: '',
   last_name: '',
-  picture: null,
+  file: null,
   department_id: '',
   degree_id: '',
   advisor_id: '',
-});
+})
 
 // Handle file upload
 const handleFileUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement;
+  const target = event.target as HTMLInputElement
   if (target.files) {
-    form.value.picture = target.files[0]; // Capture the file
+    form.value.file = target.files[0] // Capture the file
   }
-};
+}
 
 // Submit form
 const submitForm = async () => {
-  const formData = new FormData();
+  const formData = new FormData()
   Object.entries(form.value).forEach(([key, value]) => {
     if (value !== null) {
-      formData.append(key, value as string | Blob);
+      formData.append(key, value as string | Blob)
     }
-  });
+  })
   try {
-    const response = await axios.post(
-      'http://localhost:3000/students',
-      formData,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    );
-    console.log('Success:', response.data);
+    const response = await apiClient.post('/students', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    console.log('Success:', response.data)
 
     // Show success alert
     $swal.fire({
@@ -83,18 +84,79 @@ const submitForm = async () => {
       title: 'บันทึกข้อมูลสำเร็จ',
       showConfirmButton: false,
       timer: 1500,
-    });
+    })
+
+    form.value = {
+      username: '',
+      password: '',
+      student_id_card: '',
+      first_name: '',
+      last_name: '',
+      file: null,
+      department_id: '',
+      degree_id: '',
+      advisor_id: '',
+    }
+    router.push('/')
   } catch (error: any) {
-    console.error('Error:', error.response?.data || error.message);
+    console.error('Error:', error.response?.data || error.message)
 
     // Show error alert
     $swal.fire({
       icon: 'error',
       title: 'เกิดข้อผิดพลาด',
-      text: error.response?.data || error.message,
-    });
+      text: error.response?.data ? 'รหัสนักศึกษาถูกใช้งานแล้ว': error.response?.data || error.message,
+    })
   }
-};
+}
+
+const advisors = ref<Advisor[]>([])
+const deegrees = ref<Degree[]>([])
+const departments = ref<Department[]>([])
+const loading = ref<boolean>(true)
+const error = ref<string | null>(null)
+const fetchAdvisors = async () => {
+  try {
+    const response = await AdvisorService.getAdvisors()
+    advisors.value = response.data
+  } catch (err) {
+    error.value =
+      'Error fetching advisors: ' + (err instanceof Error ? err.message : err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const fetchDegrees = async () => {
+  try {
+    const response = await RegisterService.getDegrees()
+    deegrees.value = response.data
+  } catch (err) {
+    error.value =
+      'Error fetching degrees : ' + (err instanceof Error ? err.message : err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const fetchDepartment = async () => {
+  try {
+    const response = await RegisterService.getDepartments()
+    departments.value = response.data
+  } catch (err) {
+    error.value =
+      'Error fetching Departments : ' +
+      (err instanceof Error ? err.message : err)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchAdvisors()
+  fetchDegrees()
+  fetchDepartment()
+})
 </script>
 
 <template>
@@ -134,6 +196,8 @@ const submitForm = async () => {
                 type="text"
                 class="grow"
                 placeholder="Username"
+                required
+                autocomplete="off"
               />
             </label>
           </div>
@@ -152,6 +216,8 @@ const submitForm = async () => {
                 type="password"
                 class="grow"
                 placeholder="Password"
+                required
+                autocomplete="off"
               />
             </label>
           </div>
@@ -170,6 +236,7 @@ const submitForm = async () => {
                 type="text"
                 class="grow"
                 placeholder="Student ID"
+                required
               />
             </label>
           </div>
@@ -177,7 +244,7 @@ const submitForm = async () => {
           <!-- First & Last Name -->
           <div class="flex flex-col gap-1">
             <label
-              class="input input-border flex max-w-none items-center gap-2 w-full"
+              class="input input-border flex max-w-none items-center gap-2 w-full mb-2"
             >
               <font-awesome-icon
                 :icon="['fas', 'user']"
@@ -188,6 +255,8 @@ const submitForm = async () => {
                 type="text"
                 class="grow"
                 placeholder="First Name"
+                required
+                autocomplete="off"
               />
             </label>
             <label
@@ -202,6 +271,8 @@ const submitForm = async () => {
                 type="text"
                 class="grow"
                 placeholder="Last Name"
+                required
+                autocomplete="off"
               />
             </label>
           </div>
@@ -215,53 +286,70 @@ const submitForm = async () => {
                 :icon="['fas', 'camera']"
                 class="h-4 w-4 opacity-70"
               />
-              <input class="pt-2" type="file" @change="handleFileUpload" />
+              <input
+                class="pt-2"
+                type="file"
+                @change="handleFileUpload"
+                required
+              />
             </label>
           </div>
 
           <!-- Department, Degree, Advisor -->
           <div class="flex flex-col gap-1">
             <label
-              class="input input-border flex max-w-none items-center gap-2 w-full"
+              class="input input-border flex max-w-none items-center gap-2 w-full mb-2"
             >
               <font-awesome-icon
                 :icon="['fas', 'building']"
                 class="h-4 w-4 opacity-70"
               />
-              <input
-                v-model="form.department_id"
-                type="text"
-                class="grow"
-                placeholder="Department ID"
-              />
+              <select v-model="form.department_id" class="grow">
+                <option value="" disabled>เลือกสาขาวิชา</option>
+                <option
+                  v-for="department in departments"
+                  :key="department.id"
+                  :value="department.id"
+                >
+                  {{ department.department_name }}
+                </option>
+              </select>
             </label>
             <label
-              class="input input-border flex max-w-none items-center gap-2 w-full"
+              class="input input-border flex max-w-none items-center gap-2 w-full mb-2"
             >
               <font-awesome-icon
                 :icon="['fas', 'graduation-cap']"
                 class="h-4 w-4 opacity-70"
               />
-              <input
-                v-model="form.degree_id"
-                type="text"
-                class="grow"
-                placeholder="Degree ID"
-              />
+              <select v-model="form.degree_id" class="grow">
+                <option value="" disabled>เลือกระดับการศึกษา</option>
+                <option
+                  v-for="deegree in deegrees"
+                  :key="deegree.id"
+                  :value="deegree.id"
+                >
+                  {{ deegree.degree_name }}
+                </option>
+              </select>
             </label>
             <label
-              class="input input-border flex max-w-none items-center gap-2 w-full"
+              class="input input-border flex max-w-none items-center gap-2 w-full required"
             >
               <font-awesome-icon
                 :icon="['fas', 'chalkboard-teacher']"
                 class="h-4 w-4 opacity-70"
               />
-              <input
-                v-model="form.advisor_id"
-                type="text"
-                class="grow"
-                placeholder="Advisor ID"
-              />
+              <select v-model="form.advisor_id" class="grow">
+                <option value="" disabled>เลือกที่ปรึกษา</option>
+                <option
+                  v-for="advisor in advisors"
+                  :key="advisor.id"
+                  :value="advisor.id"
+                >
+                  {{ advisor.first_name }} {{ advisor.last_name }}
+                </option>
+              </select>
             </label>
           </div>
 
