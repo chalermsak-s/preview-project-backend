@@ -165,7 +165,9 @@ onMounted(fetchAppointments)
                   v-for="(student, index) in currentStduentPageItems"
                   :key="student.id"
                 >
-                  <td>{{ index + currentStduentPage }}</td>
+                  <td>
+                    {{ (currentStduentPage - 1) * pageStudentSize + index + 1 }}
+                  </td>
                   <td>{{ student.student_id_card }}</td>
                   <td>{{ student.first_name }} {{ student.first_name }}</td>
                   <td>{{ student.department?.department_name }}</td>
@@ -237,7 +239,9 @@ onMounted(fetchAppointments)
                   v-for="(advisor, index) in currentAdvisorPageItems"
                   :key="advisor.id"
                 >
-                  <td>{{ index + currentAdvisorPage }}</td>
+                  <td>
+                    {{ (currentAdvisorPage - 1) * pageAdvisorSize + index + 1 }}
+                  </td>
                   <td>{{ advisor.first_name }} {{ advisor.last_name }}</td>
                   <td>{{ advisor.department?.department_name }}</td>
                   <td>
@@ -298,6 +302,7 @@ onMounted(fetchAppointments)
                   <th>วันที่นัดหมาย</th>
                   <th>นักศึกษา</th>
                   <th>สถานะ</th>
+                  <th>ตัวจัดการ</th>
                 </tr>
               </thead>
               <tbody>
@@ -305,7 +310,7 @@ onMounted(fetchAppointments)
                   v-for="(appointment, index) in currentAppointmentPageItems"
                   :key="appointment.id"
                 >
-                  <td>{{ index + currentAppointmentPage }}</td>
+                  <td>{{ (currentAppointmentPage - 1) * pageAppointmentSize + index + 1 }}</td>
                   <td>
                     {{ appointment.advisor?.first_name }}
                     {{ appointment.advisor?.last_name }}
@@ -326,6 +331,20 @@ onMounted(fetchAppointments)
                       UtilService.statusToHtml(appointment.status?.status)
                     "
                   ></td>
+                  <td>
+                    <RouterLink
+                      :to="
+                        appointment.id
+                          ? {
+                              name: 'admin-appointment-detail-view',
+                              params: { id: appointment.id },
+                            }
+                          : '#'
+                      "
+                      class="btn"
+                      >ละเอียด</RouterLink
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>

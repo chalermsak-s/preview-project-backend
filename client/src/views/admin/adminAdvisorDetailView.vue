@@ -58,7 +58,7 @@ watchEffect(() => {
         />
         <img
           v-else
-          src="https://www.svgrepo.com/show/520490/student.svg"
+          src="https://www.svgrepo.com/show/23257/teacher.svg"
           alt="Profile"
           class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto rounded-xl object-cover"
         />

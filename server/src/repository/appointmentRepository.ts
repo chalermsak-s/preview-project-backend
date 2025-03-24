@@ -10,6 +10,7 @@ export function getAllAppointments() {
       requested_date: true,
       appointment_request_date: true,
       status_appointment_id: true,
+      student_confirmation: true,
       status: {
         select: {
           status: true,
@@ -27,7 +28,9 @@ export function getAllAppointments() {
           last_name: true,
         },
       },
-    },
+    },orderBy:{
+      requested_date: 'desc',
+    }
   })
 }
 
@@ -41,6 +44,7 @@ export function getAppointmentById(id: number) {
       requested_date: true,
       appointment_request_date: true,
       status_appointment_id: true,
+      student_confirmation: true,
       status: {
         select: {
           status: true,

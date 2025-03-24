@@ -75,6 +75,10 @@ export interface Appointment {
   admin?: Admin
 }
 
+export interface AppointmentState {
+  appointment: Appointment | null
+}
+
 export interface Degree {
   id: number
   degree_name: string

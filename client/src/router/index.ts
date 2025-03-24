@@ -10,11 +10,13 @@ import NetworkErrorView from '@/views/other/NetworkErrorView.vue'
 
 import { useStudentStore } from '@/stores/student'
 import { useAdvisorStore } from '@/stores/advisor'
+import { useAppointmentStore } from '@/stores/appointment'
 
 import adminDashboardView from '@/views/admin/adminDashboardView.vue'
 import adminStudentDetailView from '@/views/admin/adminStudentDetailView.vue'
 import adminAdvisorDetailView from '@/views/admin/adminAdvisorDetailView.vue'
-import adminAddAddvisorView from '@/views/admin/adminAddAddvisorView.vue'
+import adminAddAdvisorView from '@/views/admin/adminAddAdvisorView.vue'
+import adminAppointmentDetailView from '@/views/admin/adminAppointmentDetailView.vue'
 
 import AdvisorListView from '@/views/advisor/AdvisorListView.vue'
 import advisorDashboardView from '@/views/advisor/advisorDashboardView.vue'
@@ -24,6 +26,7 @@ import StudentListView from '@/views/student/StudentListView.vue'
 import StudentDetailView from '@/views/student/StudentDetailView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
 import AdvisorService from '@/services/AdvisorService'
+import AppointmentService from '@/services/AppointmentService'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -202,7 +205,7 @@ const router = createRouter({
     {
       path: '/admin/add/advisor',
       name: 'admin-add-advisor',
-      component: adminAddAddvisorView,
+      component: adminAddAdvisorView,
       props: true,
       beforeEnter: () => {
         const authStore = useAuthStore()
@@ -210,6 +213,41 @@ const router = createRouter({
           return {
             name: '404-resource-view',
             params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/detail/appointment/:id',
+      name: 'admin-appointment-detail-view',
+      component: adminAppointmentDetailView,
+      props: true,
+      beforeEnter: async (to: any) => {
+        const authStore = useAuthStore()
+        if (!authStore.isAdmin) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        } else {
+          const id = Number(to.params.id) // ป้องกัน NaN
+          if (isNaN(id)) {
+            return {
+              name: '404-resource-view',
+              params: { resource: 'appointment' },
+            }
+          }
+          const appointmentStore = useAppointmentStore()
+          try {
+            const response = await AppointmentService.getAppointment(id)
+            appointmentStore.setStore(response.data)
+            return true // อนุญาตให้ไปต่อ
+          } catch (error: any) {
+            console.error('Fetch Appointment Error:', error) // เพิ่ม log สำหรับ debug
+            const status = error.response?.status
+            return status === 404
+              ? { name: '404-resource-view', params: { resource: 'appointment' } }
+              : { name: 'network-error-view' }
           }
         }
       },
