@@ -42,6 +42,8 @@ const closeDetails = (event: any) => {
   }
 }
 
+
+
 onMounted(() => {
   document.addEventListener('click', closeDetails)
 })

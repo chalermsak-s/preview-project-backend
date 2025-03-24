@@ -1,0 +1,19 @@
+const currentAppointmentPage = ref(1)
+const pageAppointmentSize = 3
+
+const totalAppointmentPages = computed(() =>
+  Math.ceil(Appointments.value.length / pageAppointmentSize)
+)
+
+const currentAppointmentPageItems = computed(() => {
+  const start = (currentAppointmentPage.value - 1) * pageAppointmentSize
+  return Appointments.value.slice(start, start + pageAppointmentSize)
+})
+
+const prveAppointment = () => {
+  if (currentAppointmentPage.value > 1) currentAppointmentPage.value--
+}
+
+const nextAppointment = () => {
+  if (currentAppointmentPage.value < totalAppointmentPages.value) currentAppointmentPage.value++
+}

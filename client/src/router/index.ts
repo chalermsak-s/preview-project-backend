@@ -9,18 +9,21 @@ import NotFoundView from '@/views/other/NotFoundView.vue'
 import NetworkErrorView from '@/views/other/NetworkErrorView.vue'
 
 import { useStudentStore } from '@/stores/student'
+import { useAdvisorStore } from '@/stores/advisor'
 
 import adminDashboardView from '@/views/admin/adminDashboardView.vue'
+import adminStudentDetailView from '@/views/admin/adminStudentDetailView.vue'
+import adminAdvisorDetailView from '@/views/admin/adminAdvisorDetailView.vue'
+import adminAddAddvisorView from '@/views/admin/adminAddAddvisorView.vue'
 
 import AdvisorListView from '@/views/advisor/AdvisorListView.vue'
 import advisorDashboardView from '@/views/advisor/advisorDashboardView.vue'
-
 
 import studentService from '@/services/StudentService'
 import StudentListView from '@/views/student/StudentListView.vue'
 import StudentDetailView from '@/views/student/StudentDetailView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
-
+import AdvisorService from '@/services/AdvisorService'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -124,8 +127,95 @@ const router = createRouter({
         }
       },
     },
+    {
+      path: '/admin/detail/student/:id',
+      name: 'admin-student-detail-view',
+      component: adminStudentDetailView,
+      props: true,
+      beforeEnter: async (to: any) => {
+        const authStore = useAuthStore()
+        if (!authStore.isAdmin) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        } else {
+          const id = Number(to.params.id) // ป้องกัน NaN
+          if (isNaN(id)) {
+            return {
+              name: '404-resource-view',
+              params: { resource: 'student' },
+            }
+          }
+
+          const studentStore = useStudentStore()
+
+          try {
+            const response = await studentService.getStudent(id)
+            studentStore.setStore(response.data)
+            return true // อนุญาตให้ไปต่อ
+          } catch (error: any) {
+            console.error('Fetch Student Error:', error) // เพิ่ม log สำหรับ debug
+            const status = error.response?.status
+            return status === 404
+              ? { name: '404-resource-view', params: { resource: 'student' } }
+              : { name: 'network-error-view' }
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/detail/advisor/:id',
+      name: 'admin-advisor-detail-view',
+      component: adminAdvisorDetailView,
+      props: true,
+      beforeEnter: async (to: any) => {
+        const authStore = useAuthStore()
+        if (!authStore.isAdmin) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        } else {
+          const id = Number(to.params.id) // ป้องกัน NaN
+          if (isNaN(id)) {
+            return {
+              name: '404-resource-view',
+              params: { resource: 'advisor' },
+            }
+          }
+          const advisorStore = useAdvisorStore()
+          try {
+            const response = await AdvisorService.getAdvisor(id)
+            advisorStore.setStore(response.data)
+            return true // อนุญาตให้ไปต่อ
+          } catch (error: any) {
+            console.error('Fetch Student Error:', error) // เพิ่ม log สำหรับ debug
+            const status = error.response?.status
+            return status === 404
+              ? { name: '404-resource-view', params: { resource: 'advisor' } }
+              : { name: 'network-error-view' }
+          }
+        }
+      },
+    },
+    {
+      path: '/admin/add/advisor',
+      name: 'admin-add-advisor',
+      component: adminAddAddvisorView,
+      props: true,
+      beforeEnter: () => {
+        const authStore = useAuthStore()
+        if (!authStore.isAdmin) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        }
+      },
+    },
     /* Admin End */
-    
+
     /* Advisor Start */
     {
       path: '/advisor-dashboard',
@@ -143,7 +233,7 @@ const router = createRouter({
       },
     },
     /* Advisor End */
-     
+
     /* Student Start */
     {
       path: '/student-dashboard',

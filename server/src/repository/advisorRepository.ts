@@ -19,7 +19,20 @@ export function getAllAdvisors() {
 }
 
 export function getAdvisorById(id: number) {
-  return prisma.student.findUnique({
+  return prisma.advisor.findUnique({
     where: { id },
+    select: {
+      id: true,
+      first_name: true,
+      last_name: true,
+      academic_position: true,
+      department_id: true,
+      department: {
+        select: {
+          department_name: true,
+          initials: true,
+        },
+      },
+    },
   })
 }

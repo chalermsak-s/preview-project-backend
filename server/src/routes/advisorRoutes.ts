@@ -8,14 +8,12 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id)
-  try {
-    res.status(200).json(await advisorService.getAdvisorById(id))
-  } catch (error) {
-    res.status(500).json({
-      error_code: 'ADVS_ID_INVALID',
-      message: 'Invalid Advisor ID. Please check and try again.',
-    })
-  }
+    const advisor = await advisorService.getAdvisorById(id)
+    if (advisor) {
+      res.json(advisor)
+    } else {
+      res.status(404).send('Advisor not found')
+    }
 })
 
 export default router
