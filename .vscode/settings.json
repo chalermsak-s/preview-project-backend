@@ -2,5 +2,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.semi": false,
   "prettier.singleQuote": true,
-  "postman.settings.dotenv-detection-notification-visibility": false
+  "postman.settings.dotenv-detection-notification-visibility": false,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  }
 }

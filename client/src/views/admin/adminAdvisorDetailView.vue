@@ -46,22 +46,12 @@ watchEffect(() => {
 </script>
 <template>
   <div class="flex justify-center p-4">
-    <div
-      class="card card-border bg-base-100 w-full max-w-xs sm:max-w-sm md:max-w-md shadow-lg"
-    >
+    <div class="card card-border bg-base-100 w-full max-w-xs sm:max-w-sm md:max-w-md shadow-lg">
       <figure class="px-10 pt-10">
-        <img
-          v-if="imageExists"
-          :src="advisor?.picture ?? ''"
-          alt="รูปอาจารย์ที่ปรึกษา"
-          class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto rounded-xl object-cover"
-        />
-        <img
-          v-else
-          src="https://www.svgrepo.com/show/23257/teacher.svg"
-          alt="Profile"
-          class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto rounded-xl object-cover"
-        />
+        <img v-if="imageExists" :src="advisor?.picture ?? ''" alt="รูปอาจารย์ที่ปรึกษา"
+          class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto rounded-xl object-cover" />
+        <img v-else src="https://www.svgrepo.com/show/23257/teacher.svg" alt="Profile"
+          class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto rounded-xl object-cover" />
       </figure>
       <div class="card-body">
         <h2 class="card-title">
