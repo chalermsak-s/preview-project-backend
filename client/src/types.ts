@@ -44,33 +44,6 @@ export interface Advisor {
   students: Student[]
 }
 
-export interface AdvisorFeedback {
-  id: number
-  first_name: string
-  last_name: string
-  academic_position: {
-    id: number
-    academic_position_name: string
-  }
-  department_id: number
-  department: {
-    department_name: string
-    initials?: string
-  }
-  students: {
-    id: number
-    student_id_card: string
-    first_name: string
-    last_name: string
-    degree: {
-      degree_name: string
-    }
-    department: {
-      department_name: string
-    }
-  }[]
-}
-
 export interface AdvisorState {
   advisor: Advisor | null
 }
@@ -136,10 +109,6 @@ export interface Feedback {
   advisor?: Advisor
   responder?: Responder
   admin?: Admin
-}
-
-export interface FeedbackState {
-  feedback: Feedback | null
 }
 
 export interface Responder {
@@ -220,6 +189,16 @@ export interface RegisterForm {
   advisor_id: string
 }
 
+export interface RegisterAdvisor {
+  username: string
+  password: string
+  first_name: string
+  last_name: string
+  file: File | null
+  academic_position_id: number | null
+  department_id: number | null
+}
+
 export interface MessageState {
-  message: string
+  message: string;
 }

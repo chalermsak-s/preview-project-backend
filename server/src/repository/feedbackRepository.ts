@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import type { InsFeedback } from '../models/feedback'
 const prisma = new PrismaClient()
 
 export function getAllFeedbacks() {
@@ -96,8 +97,20 @@ export function getFeedbackByStudentId(id: number) {
         },
       },
     },
-    orderBy:{
-      timestamp: 'asc'
+    orderBy: {
+      timestamp: 'desc',
+    },
+  })
+}
+
+export function addFeedbackByAdvisor(newFeedback: InsFeedback) {
+  return prisma.feedback.create({
+    data: {
+      feedback: newFeedback.feedback,
+      timestamp: newFeedback.timestamp,
+      student_id: newFeedback.student_id,
+      advisor_id: newFeedback.advisor_id,
+      responder_id: newFeedback.responder_id
     }
-  });
+  })
 }
