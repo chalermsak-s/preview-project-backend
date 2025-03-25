@@ -16,4 +16,14 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 })
 
+router.get('/feedback-student/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+    const feedbackByStudent = await feedbackService.getFeedbackByStudentId(id)
+    if (feedbackByStudent) {
+      res.json(feedbackByStudent)
+    } else {
+      res.status(404).send('Feedback by student not found')
+    }
+})
+
 export default router
