@@ -4,22 +4,31 @@ import { ref, onMounted, computed } from 'vue'
 // import type { Appointment } from '@/types'
 import { useAuthStore } from '@/stores/auth'
 import Swal from 'sweetalert2'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faRotateLeft, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faRotateLeft, faPlus, faCheck } from '@fortawesome/free-solid-svg-icons'
+import StudentService from '@/services/StudentService'
+import UtilService from '@/services/UtilService'
 
-const router = useRouter()
 
-library.add(faRotateLeft, faPlus)
+library.add(faRotateLeft, faPlus, faCheck)
 
 interface Appointment {
   id: number
   topic: string
   description: string
   requested_date: string | Date
-  status: 'approved' | 'pending' | 'rejected' | 'completed' | undefined
+  appointment_request_date: string | Date
+  status_appointment_id: number
   student_confirmation: boolean
+  status?: {
+    status: string
+  },
+  student: {
+    first_name: string
+    last_name: string
+  },
   advisor?: {
     first_name: string
     last_name: string
@@ -37,7 +46,8 @@ const $swal = Swal
 const fetchAppointments = async () => {
   try {
     if (authStore.user?.id) {
-      const response = await AppointmentService.getAppointmentsByStudentId(authStore.user.id)
+      const id = await StudentService.getStudentIdByUserId()
+      const response = await AppointmentService.getAppointmentsByStudentId(id)
       appointments.value = response.data
     } else {
       throw new Error('ไม่พบรหัสผู้ใช้งาน (User ID)')
@@ -54,16 +64,9 @@ const fetchAppointments = async () => {
 // ฟังก์ชันยืนยันนัดหมาย
 const confirmAppointment = async (appointmentId: number) => {
   try {
-    updatingAppointment.value = appointmentId
     await AppointmentService.confirmAppointment(appointmentId)
-
-    // อัพเดตข้อมูลในรายการ
-    const index = appointments.value.findIndex(a => a.id === appointmentId)
-    if (index !== -1) {
-      appointments.value[index].student_confirmation = true
-      appointments.value[index].status = 'approved'
-    }
-
+    // อัพเดตข้อมูลในรายการ FetchData ใหม่
+    fetchAppointments();
     $swal.fire({
       title: 'ยืนยันการนัดหมาย',
       text: 'ยืนยันการนัดหมายสำเร็จ',
@@ -71,61 +74,9 @@ const confirmAppointment = async (appointmentId: number) => {
       confirmButtonText: 'ตกลง'
     })
   } catch (err) {
-    // toast.error('เกิดข้อผิดพลาดในการยืนยันการนัดหมาย: ' + 
-    // (err instanceof Error ? err.message : String(err)))
     $swal.fire({
       title: 'เกิดข้อผิดพลาด',
       text: 'ไม่สามารถยืนยันการนัดหมายได้',
-      icon: 'error',
-      confirmButtonText: 'ตกลง'
-    })
-  } finally {
-    updatingAppointment.value = null
-  }
-}
-
-// ฟังก์ชันยกเลิกนัดหมาย
-const cancelAppointment = async (appointmentId: number) => {
-  try {
-    updatingAppointment.value = appointmentId
-    await AppointmentService.cancelAppointment(appointmentId)
-
-    // อัพเดตข้อมูลในรายการ
-    const index = appointments.value.findIndex(a => a.id === appointmentId)
-    if (index !== -1) {
-      appointments.value[index].status = 'rejected'
-    }
-
-    // toast.success('ยกเลิกการนัดหมายสำเร็จ')
-    $swal.fire({
-      title: 'ยกเลิกการนัดหมาย',
-      text: 'คุณต้องการยกเลิกการนัดหมายนี้หรือไม่?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'ยืนยัน',
-      cancelButtonText: 'ยกเลิก'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // toast.success('ยกเลิกการนัดหมายสำเร็จ')
-        $swal.fire({
-          title: 'ยกเลิกการนัดหมาย',
-          text: 'ยกเลิกการนัดหมายสำเร็จ',
-          icon: 'success',
-          confirmButtonText: 'ตกลง'
-        })
-      } else {
-        $swal.fire({
-          title: 'ยกเลิกการยกเลิกการนัดหมาย',
-          text: 'ยกเลิกการยกเลิกการนัดหมาย',
-          icon: 'error',
-          confirmButtonText: 'ตกลง'
-        })
-      }
-    })
-  } catch (err) {
-    $swal.fire({
-      title: 'เกิดข้อผิดพลาด',
-      text: 'ไม่สามารถยกเลิกการนัดหมายได้',
       icon: 'error',
       confirmButtonText: 'ตกลง'
     })
@@ -155,63 +106,7 @@ const nextPage = () => {
     currentPage.value++
 }
 
-// Format date and time
-const formatDateTime = (date: Date | string): string => {
-  if (!date) {
-    return '-'
-  }
-  const dateTime = new Date(date)
-  if (isNaN(dateTime.getTime())) {
-    return '-'
-  }
-  return dateTime.toLocaleString('th-TH', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
-}
-
-// Format status to HTML
-const statusToHtml = (status: string | undefined) => {
-  if (!status) {
-    return '<span class="badge badge-xs badge-neutral whitespace-nowrap">ไม่ระบุ</span>'
-  }
-
-  switch (status) {
-    case 'approved':
-      return '<span class="badge badge-xs badge-success whitespace-nowrap">อนุมัติ</span>'
-    case 'pending':
-      return '<span class="badge badge-xs badge-warning whitespace-nowrap">รอดำเนินการ</span>'
-    case 'rejected':
-      return '<span class="badge badge-xs badge-error whitespace-nowrap">ปฏิเสธ</span>'
-    default:
-      return '<span class="badge badge-xs badge-neutral whitespace-nowrap">ไม่ระบุ</span>'
-  }
-}
-
-// ตรวจสอบว่านักศึกษาสามารถยืนยันการนัดหมายได้หรือไม่
-const canConfirm = (appointment: Appointment): boolean => {
-  return (
-    appointment.status === 'pending' &&
-    !appointment.student_confirmation
-  )
-}
-
-// ตรวจสอบว่านักศึกษาสามารถยกเลิกการนัดหมายได้หรือไม่
-const canCancel = (appointment: Appointment): boolean => {
-  return (
-    appointment.status !== 'rejected' &&
-    appointment.status !== 'completed'
-  )
-}
-
 onMounted(fetchAppointments)
-
-const goBack = () => {
-  router.go(-1)
-}
 </script>
 
 <template>
@@ -241,46 +136,40 @@ const goBack = () => {
             <tr>
               <th>วันที่นัดหมาย</th>
               <th>หัวข้อ</th>
-              <th>รายละเอียด</th>
-              <!-- <th>อาจารย์</th> -->
               <th>สถานะ</th>
+              <th>นักศึกษายืนยันคำขอ</th>
               <th>การจัดการ</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="appointment in currentPageItems" :key="appointment.id">
-              <td class="w-30 whitespace-nowrap">{{ formatDateTime(appointment.requested_date) }}</td>
-              <td class="w-30 whitespace-nowrap">{{ appointment.topic }}</td>
-              <td class="w-auto">{{ appointment.description }}</td>
-              <!-- <td class="w-30 whitespace-nowrap">{{ appointment.advisor?.first_name }} {{ appointment.advisor?.last_name }}</td> -->
-              <td class="w-30 whitespace-nowrap" v-html="statusToHtml(appointment.status)"></td>
+              <td class="w-30 whitespace-nowrap">{{ UtilService.formatDateTime(appointment.requested_date) }}</td>
+              <td class="w-auto">{{ appointment.topic }}</td>
+              <td class="w-30 whitespace-nowrap" v-html="UtilService.statusToHtml(appointment.status?.status)">
+              </td>
               <td class="w-40">
                 <!-- แสดง loading เมื่อกำลังอัพเดต -->
                 <div v-if="updatingAppointment === appointment.id" class="flex justify-center">
                   <span class="loading loading-spinner loading-sm"></span>
                 </div>
                 <div v-else class="flex gap-2">
-                  <!-- ปุ่มยืนยันการนัดหมาย -->
-                  <button v-if="canConfirm(appointment)" @click="confirmAppointment(appointment.id)"
-                    class="btn btn-xs btn-success">
+                  <span v-if="appointment.student_confirmation == true" class="text-success text-xs">
+                    <font-awesome-icon :icon="['fas', 'check']" /> ยืนยันแล้ว
+                  </span>
+                  <button v-if="appointment.student_confirmation == false" @click="confirmAppointment(appointment.id)" class="btn btn-xs btn-success">
                     ยืนยัน
                   </button>
-
-                  <!-- แสดงสถานะเมื่อยืนยันแล้ว -->
-                  <span v-else-if="appointment.student_confirmation" class="text-success text-xs">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    ยืนยันแล้ว
-                  </span>
-
-                  <!-- ปุ่มยกเลิกการนัดหมาย -->
-                  <button v-if="canCancel(appointment)" @click="cancelAppointment(appointment.id)"
-                    class="btn btn-xs btn-error">
-                    ยกเลิก
-                  </button>
                 </div>
+              </td>
+              <td>
+                <RouterLink :to="appointment.id
+                  ? {
+                    name: 'student-announcement-detail-view',
+                    params: { id: appointment.id },
+                  }
+                  : '#'
+                  " class="btn btn-sm btn-dash btn-outline"><font-awesome-icon :icon="['far', 'rectangle-list']" />
+                </RouterLink>
               </td>
             </tr>
           </tbody>

@@ -91,4 +91,13 @@ router.delete('/:id', async (req: Request, res: Response) => {
     }
 })
 
+router.post('/student/add', async (req: Request, res: Response) => {
+  const appointment = await appointmentService.AddAppointmentByStudent(req.body)
+  if (appointment) {
+    res.status(201).json(appointment)
+  } else {
+    res.status(404).send('Appointment not found')
+  }
+})
+
 export default router

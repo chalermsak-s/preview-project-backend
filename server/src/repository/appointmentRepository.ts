@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import type { InAppoinment } from '../models/appointment'
 const prisma = new PrismaClient()
 
 export function getAllAppointments() {
@@ -28,9 +29,10 @@ export function getAllAppointments() {
           last_name: true,
         },
       },
-    },orderBy:{
+    },
+    orderBy: {
       requested_date: 'desc',
-    }
+    },
   })
 }
 
@@ -146,7 +148,10 @@ export function updateAppointment(id: number, appointment: any) {
 export function confirmAppointment(id: number) {
   return prisma.appointment.update({
     where: { id },
-    data: { status_appointment_id: 2 },
+    data: {
+      student_confirmation: true,
+      status_appointment_id: 2,
+    },
   })
 }
 
@@ -163,6 +168,19 @@ export function deleteAppointment(id: number) {
   })
 }
 
-export function AddAppointmentByStudent(){
-  
+export function AddAppointmentByStudent(newAppoinment: InAppoinment) {
+  return prisma.appointment.create({
+    data: {
+      topic: newAppoinment.topic,
+      description: newAppoinment.description,
+      requested_date: new Date(),
+      appointment_request_date: new Date(
+        newAppoinment.appointment_request_date
+      ).toISOString(),
+      student_confirmation: Boolean(newAppoinment.student_confirmation),
+      student_id: newAppoinment.student_id,
+      advisor_id: newAppoinment.advisor_id,
+      status_appointment_id: newAppoinment.status_appointment_id,
+    },
+  })
 }

@@ -14,7 +14,6 @@ import FeedbackStudentView from '@/components/FeedbackStudentView.vue';
     <div class="lg:col-span-2">
       <AnnouncementList />
     </div>
-
   </div>
   <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 m-4">
     <div class="lg:col-span-1">
