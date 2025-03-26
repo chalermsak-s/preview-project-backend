@@ -97,6 +97,9 @@ export function getAppointmentByStudentId(studentId: number) {
         },
       },
     },
+    orderBy: {
+      appointment_request_date: 'desc',
+    },
   })
 }
 
@@ -129,6 +132,9 @@ export function getAppointmentByAdvisorId(advisorId: number) {
         },
       },
     },
+    orderBy: {
+      appointment_request_date: 'desc',
+    },
   })
 }
 
@@ -145,6 +151,7 @@ export function updateAppointment(id: number, appointment: any) {
   })
 }
 
+/* Student Confirm Start */
 export function confirmAppointment(id: number) {
   return prisma.appointment.update({
     where: { id },
@@ -161,6 +168,25 @@ export function cancelAppointment(id: number) {
     data: { status_appointment_id: 3 },
   })
 }
+/* Student Confirm End */
+
+/* Advisor Confirm Strat */
+export function confirmAppointmentAdvisor(id: number) {
+  return prisma.appointment.update({
+    where: { id },
+    data: {
+      status_appointment_id: 1
+    },
+  })
+}
+
+export function cancelAppointmentAdvisor(id: number) {
+  return prisma.appointment.update({
+    where: { id },
+    data: { status_appointment_id: 3 },
+  })
+}
+/* Advisor Confirm Strat */
 
 export function deleteAppointment(id: number) {
   return prisma.appointment.delete({
@@ -181,6 +207,38 @@ export function AddAppointmentByStudent(newAppoinment: InAppoinment) {
       student_id: newAppoinment.student_id,
       advisor_id: newAppoinment.advisor_id,
       status_appointment_id: newAppoinment.status_appointment_id,
+    },
+  })
+}
+
+export function getAppointment2ByAdvisorId(id: number) {
+  return prisma.appointment.findMany({
+    where: { advisor_id: id },
+    select: {
+      id: true,
+      topic: true,
+      description: true,
+      requested_date: true,
+      appointment_request_date: true,
+      status_appointment_id: true,
+      student_confirmation: true,
+      status: {
+        select: {
+          status: true,
+        },
+      },
+      student: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+      advisor: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
     },
   })
 }

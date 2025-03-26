@@ -29,6 +29,14 @@ export function cancelAppointment(id: number) {
   return appointmentRepository.cancelAppointment(id)
 }
 
+export function confirmAppointmentAdvisor(id: number) {
+  return appointmentRepository.confirmAppointmentAdvisor(id)
+}
+
+export function cancelAppointmentAdvisor(id: number) {
+  return appointmentRepository.cancelAppointmentAdvisor(id)
+}
+
 export function deleteAppointment(id: number) {
   return appointmentRepository.deleteAppointment(id)
 }
@@ -49,5 +57,9 @@ export function AddAppointmentByStudent(newAppoinment: InAppoinment) {
     status_appointment_id: newAppoinment.status_appointment_id
   };
   return appointmentRepository.AddAppointmentByStudent(dataAppoinment)
+}
+
+export function getAppointment2ByAdvisorId(id: number) {
+  return appointmentRepository.getAppointment2ByAdvisorId(id)
 }
 

@@ -8,6 +8,7 @@ export function getAllAdvisors() {
       id: true,
       first_name: true,
       last_name: true,
+      picture: true,
       academic_position: true,
       department_id: true,
       department: {
@@ -26,6 +27,7 @@ export function getAdvisorById(id: number) {
       id: true,
       first_name: true,
       last_name: true,
+      picture: true,
       academic_position: true,
       department_id: true,
       department: {

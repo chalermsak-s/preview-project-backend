@@ -48,7 +48,7 @@ const nextStudent = () => {
 onMounted(fetchStudents)
 </script>
 <template>
-<div class="card bg-white shadow-lg p-4 rounded-lg">
+<div class="card bg-white shadow-lg p-4 rounded-lg mt-5">
         <div class="card-body">
           <h2 class="text-xl font-semibold mb-4">Feedback นักศึกษา</h2>
           <div class="overflow-x-auto rounded-box border border-base-content/5">

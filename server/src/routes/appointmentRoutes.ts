@@ -66,6 +66,26 @@ router.put('/:id/cancel', async (req: Request, res: Response) => {
     }
 })
 
+router.put('/advisor/:id/confirm', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+    const appointment = await appointmentService.confirmAppointmentAdvisor(id)
+    if (appointment) {
+      res.json(appointment)
+    } else {
+      res.status(404).send('Appointment not found')
+    }
+})
+
+router.put('/advisor/:id/cancel', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+    const appointment = await appointmentService.cancelAppointmentAdvisor(id)
+    if (appointment) {
+      res.json(appointment)
+    } else {
+      res.status(404).send('Appointment not found')
+    }
+})
+
 router.post('/', async (req: Request, res: Response) => {
     const appointment = await appointmentService.createAppointment(req.body)
     res.status(201).json(appointment)
@@ -98,6 +118,18 @@ router.post('/student/add', async (req: Request, res: Response) => {
   } else {
     res.status(404).send('Appointment not found')
   }
+})
+
+
+
+router.get('/appointment-advisor/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+    const getAppointmentByAdvisor = await appointmentService.getAppointment2ByAdvisorId(id)
+    if (getAppointmentByAdvisor) {
+      res.json(getAppointmentByAdvisor)
+    } else {
+      res.status(404).send('Appointment by this advisor not found')
+    }
 })
 
 export default router

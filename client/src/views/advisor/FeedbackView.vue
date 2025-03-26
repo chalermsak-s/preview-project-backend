@@ -109,7 +109,7 @@ const submitForm = async () => {
                     <div class="chat chat-start" v-if="item.responder_id === 1">
                         <div class="chat-image avatar">
                             <div class="w-10 rounded-full">
-                                <img alt="Student Avatar" src="https://www.svgrepo.com/show/520490/student.svg" />
+                                <img alt="Student Avatar" src="https://www.svgrepo.com/show/520490/student.svg" class="object-cover" />
                             </div>
                         </div>
                         <div class="chat-header">
@@ -123,7 +123,7 @@ const submitForm = async () => {
                     <div class="chat chat-end" v-if="item.responder_id === 2">
                         <div class="chat-image avatar">
                             <div class="w-10 rounded-full">
-                                <img alt="Teacher Avatar" src="https://www.svgrepo.com/show/240382/teacher.svg" />
+                                <img alt="Teacher Avatar" src="https://www.svgrepo.com/show/240382/teacher.svg" class="object-cover" />
                             </div>
                         </div>
                         <div class="chat-header">
