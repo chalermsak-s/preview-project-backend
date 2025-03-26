@@ -41,8 +41,7 @@ const isError = computed(() => {
       <input
         :type="type"
         :id="uuid"
-        class="grow text-base placeholderErrorClass8"
-        placeholder="User"
+        :class="placeholderErrorClass"
         autocomplete="off"
         :placeholder="placeholder"
         v-bind="$attrs"
