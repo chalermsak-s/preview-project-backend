@@ -30,6 +30,21 @@ export function addStudent(newStudent: InStudent) {
   return studentRepository.addStudent(dataStudent)
 }
 
+export function updateStudentById(id:number,updatedStudent: InStudent) {
+  const dataStudent = {
+    username: updatedStudent.username,
+    password: bcrypt.hashSync(updatedStudent.password),
+    student_id_card: updatedStudent.student_id_card,
+    first_name: updatedStudent.first_name,
+    last_name: updatedStudent.last_name,
+    picture: updatedStudent.picture,
+    department_id: updatedStudent.department_id,
+    degree_id: updatedStudent.degree_id,
+    advisor_id: updatedStudent.advisor_id
+  };
+  return studentRepository.updateStudentById(id,dataStudent)
+}
+
 export async function getAllStudentPagination(
   keyword: string,
   pageSize: number,

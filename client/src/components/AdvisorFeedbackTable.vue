@@ -15,7 +15,6 @@ const fetchStudents = async () => {
     const id = await AdvisorService.getAdvisorIdByUserId()
     const response = await AdvisorService.getStudentByAdvisor(id)
     students.value = response.data.students
-    console.log(response.data.students)
   } catch (err) {
     error.value =
       'Error fetching students: ' + (err instanceof Error ? err.message : err)

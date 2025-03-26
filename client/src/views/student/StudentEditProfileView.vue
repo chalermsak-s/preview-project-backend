@@ -90,7 +90,7 @@ const submitForm = async () => {
       degree_id: '',
       advisor_id: '',
     }
-    router.push('/')
+    router.push('/student-dashboard')
   } catch (error: any) {
     console.error('Error:', error.response?.data || error.message)
 

@@ -78,8 +78,7 @@ const displayFile = (fileUrl: string | undefined) => isImage(fileUrl) ? fileUrl 
   <div class="overflow-x-auto">
     <div class="card bg-white shadow-lg p-4 rounded-lg mb-4">
       <div class="card-body">
-        <div class="card-actions justify-end mt-2">
-        </div>
+        <h2 class="text-xl font-semibold mb-4">ประวัติการประกาศ</h2>
         <table class="table">
           <thead>
             <tr>

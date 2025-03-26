@@ -162,3 +162,7 @@ export function deleteAppointment(id: number) {
     where: { id },
   })
 }
+
+export function AddAppointmentByStudent(){
+  
+}

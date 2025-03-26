@@ -32,6 +32,11 @@ library.add(faRotateLeft)
     <div class="flex justify-center mt-12 mb-6 w-4xl m-auto">
         <div class="card card-border bg-base-100 w-full shadow-lg">
             <div class="card-body">
+                <div class="card-actions justify-start">
+                    <button @click="goBack" class="btn">
+                        <font-awesome-icon :icon="['fas', 'rotate-left']" /> ถอยกลับ
+                    </button>
+                </div>
                 <h2 class="card-title">{{ announcement?.topic }}</h2>
                 <div>
                     {{ UtilService.formatDateTime(announcement?.posted_date || '') }} <br>
@@ -42,11 +47,6 @@ library.add(faRotateLeft)
                 </p>
                 <figure ref="galleryContainer" v-html="UtilService.displayFileFromURL(announcement?.file || '').html">
                 </figure>
-                <div class="card-actions justify-end">
-                    <button @click="goBack" class="btn">
-                        <font-awesome-icon :icon="['fas', 'rotate-left']" /> ถอยกลับ
-                    </button>
-                </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import type { Student, PageStudent, InStudent } from '../models/student'
+import type { PageStudent, InStudent } from '../models/student'
 
 const prisma = new PrismaClient()
 
@@ -134,17 +134,30 @@ export function getStudentIdByUserId(id: number) {
   })
 }
 
-export function updateStudentById(studentId: number, updatedStudent: InStudent) {
+export async function updateStudentById(studentId: number, updatedStudent: InStudent) {
+  
+  const user = await prisma.user.findFirst({
+    where: {
+      student: {
+        id: studentId
+      },
+    },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
   return prisma.user.update({
     where: {
-      id: studentId,
+      id: user.id
     },
     data: {
       username: updatedStudent.username,
       password: updatedStudent.password,
       user_role: {
         connect: {
-          role_name: 'Student',
+          role_name: 'Student'
         },
       },
       student: {

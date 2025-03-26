@@ -35,6 +35,7 @@ import StudentListView from '@/views/student/StudentListView.vue'
 import StudentDetailView from '@/views/student/StudentDetailView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
 import StudentEditProfileView from '@/views/student/StudentEditProfileView.vue'
+import StudentAddAppointmentView from '@/views/student/StudentAddAppointmentView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -411,6 +412,31 @@ const router = createRouter({
             const status = error.response?.status
             return status === 404
               ? { name: '404-resource-view', params: { resource: 'announcement' } }
+              : { name: 'network-error-view' }
+          }
+        }
+      },
+    },
+    {
+      path: '/student/add/appointment',
+      name: 'student-add-appointment-view',
+      component: StudentAddAppointmentView,
+      props: true,
+      beforeEnter: () => {
+        const authStore = useAuthStore()
+        if (!authStore.isStudent) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        } else {
+          try {
+            return true // อนุญาตให้ไปต่อ
+          } catch (error: any) {
+            console.error('Appointment Add Error:', error) // เพิ่ม log สำหรับ debug
+            const status = error.response?.status
+            return status === 404
+              ? { name: '404-resource-view', params: { resource: 'appointment' } }
               : { name: 'network-error-view' }
           }
         }
