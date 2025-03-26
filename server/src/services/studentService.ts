@@ -11,6 +11,10 @@ export function getStudentById(id: number) {
   return studentRepository.getStudentById(id)
 }
 
+export function getStudentIdByUserId(id: number) {
+  return studentRepository.getStudentIdByUserId(id)
+}
+
 export function addStudent(newStudent: InStudent) {
   const dataStudent = {
     username: newStudent.username,

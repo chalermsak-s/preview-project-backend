@@ -14,6 +14,12 @@ import { useAppointmentStore } from '@/stores/appointment'
 import { useAnnouncementStore } from '@/stores/announcement'
 import { useFeedbackStore } from '@/stores/feedback'
 
+import studentService from '@/services/StudentService'
+import AdvisorService from '@/services/AdvisorService'
+import AppointmentService from '@/services/AppointmentService'
+import AnnouncementService from '@/services/AnnouncementService'
+import FeedbackService from '@/services/FeedbackService'
+
 import adminDashboardView from '@/views/admin/adminDashboardView.vue'
 import adminStudentDetailView from '@/views/admin/adminStudentDetailView.vue'
 import adminAdvisorDetailView from '@/views/admin/adminAdvisorDetailView.vue'
@@ -25,16 +31,10 @@ import AdvisorListView from '@/views/advisor/AdvisorListView.vue'
 import advisorDashboardView from '@/views/advisor/advisorDashboardView.vue'
 import FeedbackView from '@/views/advisor/FeedbackView.vue'
 
-
-import studentService from '@/services/StudentService'
 import StudentListView from '@/views/student/StudentListView.vue'
 import StudentDetailView from '@/views/student/StudentDetailView.vue'
 import StudentDashboardView from '@/views/student/StudentDashboardView.vue'
-import AdvisorService from '@/services/AdvisorService'
-import AppointmentService from '@/services/AppointmentService'
-import AnnouncementService from '@/services/AnnouncementService'
-import FeedbackService from '@/services/FeedbackService'
-
+import StudentEditProfileView from '@/views/student/StudentEditProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -366,6 +366,56 @@ const router = createRouter({
         }
       },
     },
+    {
+      path: '/student/prifle/edit',
+      name: 'student-profile-edit',
+      component: StudentEditProfileView,
+      props: true,
+      beforeEnter: async () => {
+        const authStore = useAuthStore()
+        if (!authStore.isStudent) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        }
+      },
+    },
+    {
+      path: '/student/detail/announcement/:id',
+      name: 'student-announcement-detail-view',
+      component: adminAnnouncementsDetailView,
+      props: true,
+      beforeEnter: async (to: any) => {
+        const authStore = useAuthStore()
+        if (!authStore.isStudent) {
+          return {
+            name: '404-resource-view',
+            params: { resource: 'you-are-not-allowed-to-access' },
+          }
+        } else {
+          const id = Number(to.params.id) // ป้องกัน NaN
+          if (isNaN(id)) {
+            return {
+              name: '404-resource-view',
+              params: { resource: 'appointment' },
+            }
+          }
+          const announcementStore = useAnnouncementStore()
+          try {
+            const response = await AnnouncementService.getAnnouncement(id)
+            announcementStore.setStore(response.data)
+            return true // อนุญาตให้ไปต่อ
+          } catch (error: any) {
+            console.error('Fetch Announcement Error:', error) // เพิ่ม log สำหรับ debug
+            const status = error.response?.status
+            return status === 404
+              ? { name: '404-resource-view', params: { resource: 'announcement' } }
+              : { name: 'network-error-view' }
+          }
+        }
+      },
+    }
     /* Student End */
   ],
 

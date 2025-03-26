@@ -16,4 +16,14 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
 })
 
+router.get('/advisor-id-by-student-id/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+    const getAnnouncementByStudentId = await announcementService.getAnnouncementByStudentId(id)
+    if (getAnnouncementByStudentId) {
+      res.json(getAnnouncementByStudentId)
+    } else {
+      res.status(404).send('Announcement studentId to advisorId not found')
+    }
+})
+
 export default router

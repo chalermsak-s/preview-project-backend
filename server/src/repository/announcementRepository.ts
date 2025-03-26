@@ -42,3 +42,33 @@ export function getAnnouncementById(id: number) {
     },
   })
 }
+
+export function getAnnouncementByStudentId(id: number) {
+  return prisma.announcement.findMany({
+      where: {
+        advisor: {
+          students: {
+            some: {
+              id: id,
+            },
+          },
+        },
+      },select: {
+        id: true,
+        topic: true,
+        description: true,
+        file: true,
+        posted_date: true,
+        advisor_id: true,
+        advisor: {
+          select: {
+            first_name: true,
+            last_name: true,
+          },
+        },
+      },
+      orderBy: {
+        posted_date: 'desc',
+      }
+  })
+}

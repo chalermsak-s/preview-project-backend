@@ -34,7 +34,8 @@ library.add(faRotateLeft)
             <div class="card-body">
                 <h2 class="card-title">{{ announcement?.topic }}</h2>
                 <div>
-                    {{ UtilService.formatDateTime(announcement?.posted_date || '') }}
+                    {{ UtilService.formatDateTime(announcement?.posted_date || '') }} <br>
+                    {{ announcement?.advisor?.first_name }}&nbsp;&nbsp;{{ announcement?.advisor?.last_name }}
                 </div>
                 <p>
                     {{ announcement?.description }}
