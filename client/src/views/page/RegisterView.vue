@@ -333,7 +333,7 @@ onMounted(() => {
                 </option>
               </select>
             </label>
-            <label
+            <!-- <label
               class="input input-border flex max-w-none items-center gap-2 w-full required"
             >
               <font-awesome-icon
@@ -341,7 +341,7 @@ onMounted(() => {
                 class="h-4 w-4 opacity-70"
               />
               <select v-model="form.advisor_id" class="grow">
-                <option value="" disabled>เลือกที่ปรึกษา</option>
+                <option value="null">เลือกที่ปรึกษา</option>
                 <option
                   v-for="advisor in advisors"
                   :key="advisor.id"
@@ -350,7 +350,7 @@ onMounted(() => {
                   {{ advisor.first_name }} {{ advisor.last_name }}
                 </option>
               </select>
-            </label>
+            </label> -->
           </div>
 
           <!-- Submit Button -->

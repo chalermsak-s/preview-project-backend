@@ -143,7 +143,7 @@ onMounted(fetchAppointments)
           </thead>
           <tbody>
             <tr v-for="appointment in currentPageItems" :key="appointment.id">
-              <td class="w-30 whitespace-nowrap">{{ UtilService.formatDateTime(appointment.requested_date) }}</td>
+              <td class="w-30 whitespace-nowrap">{{ UtilService.formatDateTime(appointment.appointment_request_date) }}</td>
               <td class="w-auto">{{ appointment.topic }}</td>
               <td class="w-30 whitespace-nowrap" v-html="UtilService.statusToHtml(appointment.status?.status)">
               </td>
@@ -156,7 +156,7 @@ onMounted(fetchAppointments)
                   <span v-if="appointment.student_confirmation == true" class="text-success text-xs">
                     <font-awesome-icon :icon="['fas', 'check']" /> ยืนยันแล้ว
                   </span>
-                  <button v-if="appointment.student_confirmation == false" @click="confirmAppointment(appointment.id)" class="btn btn-xs btn-success">
+                  <button v-if="appointment.status?.status == 'approved' && appointment.student_confirmation == false" @click="confirmAppointment(appointment.id)" class="btn btn-xs btn-success">
                     ยืนยัน
                   </button>
                 </div>
@@ -164,7 +164,7 @@ onMounted(fetchAppointments)
               <td>
                 <RouterLink :to="appointment.id
                   ? {
-                    name: 'student-announcement-detail-view',
+                    name: 'student-appointment-detail-view',
                     params: { id: appointment.id },
                   }
                   : '#'
